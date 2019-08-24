@@ -12,14 +12,14 @@ notify:
     api_key: !secret slack_api_key
     default_channel: '#general'
 
-usps:
-  username: !secret usps_username
-  password: !secret usps_password
-  driver: phantomjs
+    #usps:
+    #  username: !secret usps_username
+    #  password: !secret usps_password
+    #  driver: phantomjs
 
-camera:
-  - platform: usps
-    scan_interval: 5
+    #camera:
+    #  - platform: usps
+    #    scan_interval: 5
 
 # Sensors
 sensor:
@@ -98,12 +98,17 @@ binary_sensor:
     name: Meteolojinx
     scan_interval: 15
 
-#vacuum:
-#- platform: roomba
-#    host: 192.168.86.175
-#    username: !secret roomba_upstairs_username
-#    password: !secret roomba_upstairs_password
-#    name: 'TopFloor Roomba'
+vacuum:
+  - platform: roomba
+    host: 192.168.86.175
+    username: !secret roomba_upstairs_username
+    password: !secret roomba_upstairs_password
+    name: 'TopFloor Roomba'
+  - platform: roomba
+    host: 192.168.86.174
+    username: !secret roomba_mainfloor_username
+    password: !secret roomba_mainfloor_password
+    name: 'MainFloor Roomba'
 
 mqtt:
   broker: 192.168.86.32
