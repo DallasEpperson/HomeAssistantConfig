@@ -1,0 +1,111 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+  customize: !include customize.yaml
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+notify:
+  - name: !secret slack_name
+    platform: slack
+    api_key: !secret slack_api_key
+    default_channel: '#general'
+
+usps:
+  username: !secret usps_username
+  password: !secret usps_password
+  driver: phantomjs
+
+camera:
+  - platform: usps
+    scan_interval: 5
+
+# Sensors
+sensor:
+  # Weather prediction
+  - platform: yr
+  - platform: google_wifi
+    name: 'Basement Wifi'
+    host: '192.168.86.1'
+  - platform: google_wifi
+    name: 'Office Wifi'
+    host: '192.168.86.22'
+  - platform: google_wifi
+    name: 'Garage Wifi'
+    host: '192.168.86.24'
+  - platform: duke_energy
+    username: !secret duke_username
+    password: !secret duke_password
+  - platform: mqtt
+    state_topic: 'weather/outTemp_F'
+    unit_of_measurement: '°F'
+    name: 'Orchard Temperature'
+    device_class: temperature
+    value_template: '{{ value | round(1) }}'
+  - platform: mqtt
+    state_topic: 'weather/inTemp_F'
+    unit_of_measurement: '°F'
+    name: 'Garage Temperature'
+    device_class: temperature
+    value_template: '{{ value | round(1) }}'
+  - platform: mqtt
+    state_topic: 'weather/outHumidity'
+    unit_of_measurement: '% Humidity'
+    name: 'Orchard Humidity'
+    device_class: humidity
+    value_template: '{{ value | round(1) }}'
+  - platform: mqtt
+    state_topic: 'weather/windSpeed_mph'
+    unit_of_measurement: 'MPH'
+    name: 'Wind Speed'
+    value_template: '{{ value | round(1) }}'
+  - platform: mqtt
+    state_topic: 'weather/windGust_mph'
+    unit_of_measurement: 'MPH'
+    name: 'Wind Gust'
+    value_template: '{{ value | round(1) }}'
+  - platform: mqtt
+    state_topic: 'weather/hourRain_in'
+    unit_of_measurement: 'inch'
+    name: 'Hourly Rainfall'
+    value_template: '{{ value | round(2) }}'
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+cast:
+  media_player:
+    - host: 192.168.86.36  # MBR Chromecast
+    - host: 192.168.86.34  # Game Room Mini
+    - host: 192.168.86.26  # Kitchen Home
+    - host: 192.168.86.27  # MBR Mini
+    - host: 192.168.86.28  # Entrance Mini
+    - host: 192.168.86.29  # Garage Mini
+
+binary_sensor:
+  - platform: ping
+    host: 192.168.86.30
+    name: PiInTheSky
+    scan_interval: 15
+  - platform: ping
+    host: 192.168.86.31
+    name: Meteolojinx
+    scan_interval: 15
+
+#vacuum:
+#- platform: roomba
+#    host: 192.168.86.175
+#    username: !secret roomba_upstairs_username
+#    password: !secret roomba_upstairs_password
+#    name: 'TopFloor Roomba'
+
+mqtt:
+  broker: 192.168.86.32
+
+

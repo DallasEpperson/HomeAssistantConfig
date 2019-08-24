@@ -1,0 +1,5 @@
+switch.garage_flood_light:
+  icon: mdi:spotlight-beam
+
+device_tracker.6dfa9d86301b4355bc56a867e91ac18b_pixel3:
+  hidden: true

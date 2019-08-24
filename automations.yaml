@@ -1,0 +1,105 @@
+- id: '1560740057111'
+  alias: Garage Lanterns on at dusk
+  trigger:
+  - event: sunset
+    platform: sun
+  condition: []
+  action:
+  - alias: ''
+    data:
+      entity_id: switch.garage_lanterns
+    service: switch.turn_on
+- id: '1560740311154'
+  alias: Exterior Lights off at dawn
+  trigger:
+  - event: sunrise
+    platform: sun
+  condition: []
+  action:
+  - data:
+      entity_id: switch.garage_lanterns
+    service: switch.turn_off
+  - data:
+      entity_id: switch.driveway_light
+    service: switch.turn_off
+  - data:
+      entity_id: switch.garage_flood_light
+    service: switch.turn_off
+  - data:
+      entity_id: switch.back_porch_lights
+    service: switch.turn_off
+  - data:
+      entity_id: switch.entrance_light
+    service: switch.turn_off
+- id: '1560740711193'
+  alias: Master Bedroom Intrusion
+  trigger:
+  - entity_id: binary_sensor.master_bedroom_door_contact
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: person.dallas_epperson
+    state: not_home
+  action:
+  - data:
+      entity_id: media_player.master_bedroom_speaker
+      message: Who are you, and what are you doing in my room?
+    service: tts.google_translate_say
+- id: '1561411984210'
+  alias: Fish Pond Alert
+  trigger:
+  - entity_id: switch.fish_pond
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      message: Fish Pond has been turned off!
+    service: notify.northreeceslack
+- id: '1561746757682'
+  alias: Garage Pi Malfunction
+  trigger:
+  - entity_id: binary_sensor.meteolojinx
+    for: 00:03:00
+    from: 'on'
+    platform: state
+    to: 'off'
+  - entity_id: binary_sensor.piinthesky
+    for: 00:03:00
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      message: ':computer: Connection lost to one of the garage Raspberry Pis.'
+    service: notify.northreeceslack
+- id: '1564867882993'
+  alias: Entrance and kitchen light on at dusk
+  trigger:
+  - event: sunset
+    platform: sun
+  condition: []
+  action:
+  - data:
+      entity_id: switch.entrance_light
+    service: switch.turn_on
+  - data:
+      entity_id: switch.kitchen_ceiling_light
+    service: switch.turn_on
+- id: '1564868068444'
+  alias: Entrance and kitchen off at midnight
+  trigger:
+  - at: 00:00:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.entrance_light
+    service: switch.turn_off
+  - data:
+      entity_id: switch.kitchen_ceiling_light
+    service: switch.turn_off
