@@ -71,6 +71,10 @@ sensor:
     name: 'Hourly Rainfall'
     value_template: '{{ value | round(2) }}'
 
+wwlln:
+  radius: 50
+
+
 # Text to speech
 tts:
   - platform: google_translate
